@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soquet io</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+
+</head>
+
+<body>
+    <button id="join">entrar no socket</button>
+    <button id="send-message">textar envio</button> <br> <br>
+    <label id="receber"></label> <br>
+    <input type="text" name="" id="texto">
+    <button onclick="enviarMensagem()">enviar</button>
+
+
+    <script type="text/javascript">
+        let socket;
+        document.getElementById('join').addEventListener('click', function () {
+            if (!socket) {
+                socket = new io('http://localhost:3333');
+            }
+
+            socket.on('recebido', message => {
+                console.log(message);
+                var elemento = document.getElementById('receber');
+                elemento.innerHTML = message;
+            });
+        });
+
+        document.getElementById('send-message').addEventListener('click', () => {
+            if (!socket) {
+                return;
+            }
+            socket.emit('mensage', `Helo world ${Math.random()}`);
+        });
+
+        function enviarMensagem() {
+            var texto = document.getElementById("texto").value;
+            console.log(texto);
+            socket.emit('mensage', texto);
+        }
+    </script>
+
+</body>
+
+</html>
